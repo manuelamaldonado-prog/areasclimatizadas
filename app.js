@@ -441,3 +441,9 @@ function descargarPDF() {
   ventana.document.close();
   ventana.print();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  generarFormularios();
+  mostrarPaso(1);
+});
+
