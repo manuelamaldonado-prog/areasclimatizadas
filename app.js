@@ -386,8 +386,40 @@ function calcular() {
 
 function descargarPDF() {
   const contenido = document.getElementById("resultado").innerHTML;
+
   const ventana = window.open("", "_blank");
-  ventana.document.write(`<html><body>${contenido}</body></html>`);
+  ventana.document.write(`
+    <html>
+    <head>
+      <title>Informe Área Climatizada</title>
+
+      <!-- Fuente Public Sans -->
+      <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+      <style>
+        body {
+          font-family: 'Public Sans', sans-serif;
+          padding: 20px;
+          color: #222;
+          line-height: 1.5;
+        }
+        h3 {
+          border-bottom: 2px solid #ddd;
+        }
+        textarea {
+          width: 100%;
+          height: 120px;
+          border: 1px solid #aaa;
+          padding: 8px;
+          border-radius: 6px;
+          font-family: 'Public Sans', sans-serif;
+        }
+      </style>
+    </head>
+    <body>${contenido}</body>
+    </html>
+  `);
+
   ventana.document.close();
   ventana.print();
 }
