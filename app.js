@@ -279,49 +279,107 @@ function clasificarPunto() {
 
 function calcular() {
 
-  const { estado, muy, gra, med, lev, buenas } = clasificarPunto();
+  const clasif = clasificarPunto();
+  let { estado, muy, gra, med, lev, buenas } = clasif;
 
   let m2 = parseFloat(document.getElementById("m2").value) || 0;
   let capacidad = Math.floor(m2 / 3.5);
 
   let html = `
-  <h2>${estado === "rojo" ? "🟥 Área NO apta como área climatizada" :
-          estado === "amarillo" ? "🟡 Área climatizada con mejoras necesarias" :
-          "🟢 Área climatizada apta"}</h2>
+  <h2>${
+    estado === "rojo" ? "🟥 Área NO apta como área climatizada" :
+    estado === "amarillo" ? "🟡 Área climatizada con mejoras necesarias" :
+    "🟢 Área climatizada apta"
+  }</h2>
 
   <p><strong>Área total:</strong> ${m2} m²</p>
   <p><strong>Personas permitidas:</strong> ${capacidad}</p>
 
   <hr>
 
+  <h3>Datos generales del relevamiento</h3>
+  <p><strong>Punto:</strong> ${document.getElementById("nombre").value}</p>
+  <p><strong>Responsable del relevamiento:</strong> ${document.getElementById("persona").value}</p>
+  <p><strong>Días:</strong> ${document.getElementById("dias").value}</p>
+  <p><strong>Horarios:</strong> ${document.getElementById("horarios").value}</p>
+  <p><strong>Servicio médico (107):</strong>
+    ${datosGenerales.medico ? datosGenerales.medico.toUpperCase() : "NO DECLARADO"}
+  </p>
+
+  <hr>
+
   <h3>Resumen de clasificación</h3>
   <ul>
-    <li>Buenas (🟢): ${buenas}</li>
-    <li>Leves (🟡): ${lev}</li>
-    <li>Medias (🟠): ${med}</li>
-    <li>Graves (🔴): ${gra}</li>
-    <li>Muy graves (🚨): ${muy}</li>
+    <li><strong>Buenas (🟢):</strong> ${buenas}</li>
+    <li><strong>Leves (🟡):</strong> ${lev}</li>
+    <li><strong>Medias (🟠):</strong> ${med}</li>
+    <li><strong>Graves (🔴):</strong> ${gra}</li>
+    <li><strong>Muy graves (🚨):</strong> ${muy}</li>
   </ul>
 
   <hr>
 
-  <h3>Comentarios adicionales</h3>
-  <textarea style="width:100%; height:120px;"></textarea>
+  <h3>Detalle de respuestas por bloque</h3>
+  `;
 
-  <h3>Fotografías (5 máximo)</h3>
-  <div style="display:flex; flex-wrap:wrap; gap:10px;">
-    <input type="file" accept="image/*">
-    <input type="file" accept="image/*">
-    <input type="file" accept="image/*">
-    <input type="file" accept="image/*">
-    <input type="file" accept="image/*">
-  </div>
+  const nombresBloques = {
+    form2: "Bloque 2 – Confort térmico",
+    form3: "Bloque 3 – Disposiciones edilicias",
+    form4: "Bloque 4 – Envolvente térmica",
+    form5: "Bloque 5 – Protecciones pasivas",
+    form6: "Bloque 6 – Diseño",
+    form7: "Bloque 7 – Funciones y provisionamiento"
+  };
+
+  Object.keys(bloques).forEach(b => {
+    html += `<h4>${nombresBloques[b]}</h4>`;
+
+    bloques[b].forEach((pregunta, idx) => {
+      let key = `${b}_${idx}`;
+      let valor = respuestas[key];
+
+      if (!valor) {
+        html += `<p><strong>${pregunta.t}</strong><br>Sin respuesta</p>`;
+        return;
+      }
+
+      let gravedad = obtenerGravedadFinal(b, idx, valor);
+
+      let emoji =
+        gravedad === "muygrave" ? "🚨" :
+        gravedad === "grave"    ? "🔴" :
+        gravedad === "medio"    ? "🟠" :
+        gravedad === "leve"     ? "🟡" : "🟢";
+
+      html += `
+        <p>
+          <strong>${pregunta.t}</strong><br>
+          Respuesta: ${valor.toUpperCase()} — ${gravedad.toUpperCase()} ${emoji}<br>
+          <small>${pregunta.d}</small>
+        </p>
+      `;
+    });
+
+    html += `<hr>`;
+  });
+
+  html += `
+    <h3>Comentarios adicionales</h3>
+    <textarea style="width:100%; height:120px;"></textarea>
+
+    <h3>Fotografías (5 máximo)</h3>
+    <div style="display:flex; flex-wrap:wrap; gap:10px;">
+      <input type="file" accept="image/*">
+      <input type="file" accept="image/*">
+      <input type="file" accept="image/*">
+      <input type="file" accept="image/*">
+      <input type="file" accept="image/*">
+    </div>
   `;
 
   document.getElementById("resultado").innerHTML = html;
   nextStep();
 }
-
 /* ============================================================
    PDF
 =========================================================== */
