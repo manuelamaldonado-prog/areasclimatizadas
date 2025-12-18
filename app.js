@@ -219,15 +219,11 @@ function mostrarImagenes() {
 =========================================================== */
 
 function cargarResultados() {
-  // 1. Congelar comentarios
   cargarComentarios();
-
-  // 2. Generar informe final
   calcular();
-
-  // 3. Avanzar al paso de resultados
   nextStep();
 }
+
 /* ============================================================
    INFORME FINAL
 =========================================================== */
