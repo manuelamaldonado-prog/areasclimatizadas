@@ -1,21 +1,97 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Punto de Hidratación CBA</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Punto de Hidratación CBA</title>
+
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <header>
-        <h1>Punto de Hidratación CBA</h1>
-    </header>
-    <main>
-        <!-- Contenido dinámico aquí -->
-    </main>
-    <footer>
-        <p>&copy; 2025 Punto de Hidratación CBA. Todos los derechos reservados.</p>
-    </footer>
-    <script src="app.js"></script>
+
+  <header>
+    <h1>Punto de Hidratación CBA</h1>
+  </header>
+
+  <main>
+
+    <!-- =========================
+         PASO 1 – RELEVAMIENTO
+    ========================== -->
+    <section id="step1" class="step active">
+
+      <h2>Datos generales del punto</h2>
+
+      <label for="nombre">Nombre del punto</label>
+      <input id="nombre" class="input" type="text">
+
+      <label for="persona">Responsable del relevamiento</label>
+      <input id="persona" class="input" type="text">
+
+      <label for="dias">Días de funcionamiento</label>
+      <input id="dias" class="input" type="text">
+
+      <label for="horarios">Horarios</label>
+      <input id="horarios" class="input" type="text">
+
+      <label>Servicio médico (107)</label>
+      <div class="yesno-container">
+        <button onclick="setDatoGeneral('medico','si',this)">Sí</button>
+        <button onclick="setDatoGeneral('medico','no',this)">No</button>
+      </div>
+
+      <hr>
+
+      <h2>Capacidad del espacio</h2>
+
+      <label for="m2">Superficie total (m²)</label>
+      <input id="m2" class="input" type="number" min="0">
+      <div id="capacidadTexto" class="capacidad"></div>
+
+      <hr>
+
+      <!-- =========================
+           BLOQUES DE EVALUACIÓN
+      ========================== -->
+
+      <div id="form2"></div>
+      <div id="form3"></div>
+      <div id="form4"></div>
+      <div id="form5"></div>
+      <div id="form6"></div>
+      <div id="form7"></div>
+
+      <button class="next-btn" onclick="calcular()">Calcular clasificación</button>
+
+    </section>
+
+    <!-- =========================
+         PASO 2 – RESULTADOS
+    ========================== -->
+    <section id="step2" class="step">
+
+      <h2>Resultado del relevamiento</h2>
+
+      <div id="resultado"></div>
+
+      <button class="back-btn" onclick="prevStep()">Volver</button>
+      <button class="next-btn" onclick="descargarPDF()">Descargar PDF</button>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Punto de Hidratación CBA. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Script principal -->
+  <script src="app.js"></script>
+
 </body>
 </html>
