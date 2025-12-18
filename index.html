@@ -1,97 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Punto de Hidratación CBA</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación de Áreas Climatizadas</title>
 
-  <!-- Fuente -->
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Estilos -->
-  <link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <header>
-    <h1>Punto de Hidratación CBA</h1>
-  </header>
+<div id="step1" class="step active">
+  <h1>Bloque 1 – Información general</h1>
 
-  <main>
+  <label>Nombre del punto</label>
+  <input id="nombre" class="input">
 
-    <!-- =========================
-         PASO 1 – RELEVAMIENTO
-    ========================== -->
-    <section id="step1" class="step active">
+  <label>Responsable</label>
+  <input id="persona" class="input">
 
-      <h2>Datos generales del punto</h2>
+  <label>Días</label>
+  <input id="dias" class="input">
 
-      <label for="nombre">Nombre del punto</label>
-      <input id="nombre" class="input" type="text">
+  <label>Horarios</label>
+  <input id="horarios" class="input">
 
-      <label for="persona">Responsable del relevamiento</label>
-      <input id="persona" class="input" type="text">
+  <label>Superficie (m²)</label>
+  <input id="m2" type="number" class="input">
 
-      <label for="dias">Días de funcionamiento</label>
-      <input id="dias" class="input" type="text">
+  <p id="capacidadTexto" class="capacidad"></p>
 
-      <label for="horarios">Horarios</label>
-      <input id="horarios" class="input" type="text">
+  <label>Servicio médico (107)</label>
+  <div class="yesno-container">
+    <button onclick="setDatoGeneral('medico','si',this)" class="yesno">Sí</button>
+    <button onclick="setDatoGeneral('medico','no',this)" class="yesno">No</button>
+  </div>
 
-      <label>Servicio médico (107)</label>
-      <div class="yesno-container">
-        <button onclick="setDatoGeneral('medico','si',this)">Sí</button>
-        <button onclick="setDatoGeneral('medico','no',this)">No</button>
-      </div>
+  <button onclick="nextStep()" class="next-btn">Siguiente</button>
+</div>
 
-      <hr>
+<div id="step2" class="step"><h1>Bloque 2</h1><div id="form2"></div><button onclick="prevStep()" class="back-btn">Volver</button><button onclick="nextStep()" class="next-btn">Siguiente</button></div>
+<div id="step3" class="step"><h1>Bloque 3</h1><div id="form3"></div><button onclick="prevStep()" class="back-btn">Volver</button><button onclick="nextStep()" class="next-btn">Siguiente</button></div>
+<div id="step4" class="step"><h1>Bloque 4</h1><div id="form4"></div><button onclick="prevStep()" class="back-btn">Volver</button><button onclick="nextStep()" class="next-btn">Siguiente</button></div>
+<div id="step5" class="step"><h1>Bloque 5</h1><div id="form5"></div><button onclick="prevStep()" class="back-btn">Volver</button><button onclick="nextStep()" class="next-btn">Siguiente</button></div>
+<div id="step6" class="step"><h1>Bloque 6</h1><div id="form6"></div><button onclick="prevStep()" class="back-btn">Volver</button><button onclick="nextStep()" class="next-btn">Siguiente</button></div>
+<div id="step7" class="step"><h1>Bloque 7</h1><div id="form7"></div><button onclick="prevStep()" class="back-btn">Volver</button><button onclick="calcular()" class="next-btn">Calcular</button></div>
 
-      <h2>Capacidad del espacio</h2>
+<div id="step8" class="step">
+  <h1>Resultado</h1>
+  <div id="resultado"></div>
+  <button onclick="descargarPDF()" class="next-btn">PDF</button>
+  <button onclick="location.reload()" class="next-btn">Nueva evaluación</button>
+</div>
 
-      <label for="m2">Superficie total (m²)</label>
-      <input id="m2" class="input" type="number" min="0">
-      <div id="capacidadTexto" class="capacidad"></div>
-
-      <hr>
-
-      <!-- =========================
-           BLOQUES DE EVALUACIÓN
-      ========================== -->
-
-      <div id="form2"></div>
-      <div id="form3"></div>
-      <div id="form4"></div>
-      <div id="form5"></div>
-      <div id="form6"></div>
-      <div id="form7"></div>
-
-      <button class="next-btn" onclick="calcular()">Calcular clasificación</button>
-
-    </section>
-
-    <!-- =========================
-         PASO 2 – RESULTADOS
-    ========================== -->
-    <section id="step2" class="step">
-
-      <h2>Resultado del relevamiento</h2>
-
-      <div id="resultado"></div>
-
-      <button class="back-btn" onclick="prevStep()">Volver</button>
-      <button class="next-btn" onclick="descargarPDF()">Descargar PDF</button>
-
-    </section>
-
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Punto de Hidratación CBA. Todos los derechos reservados.</p>
-  </footer>
-
-  <!-- Script principal -->
-  <script src="app.js"></script>
-
+<script src="app.js"></script>
 </body>
 </html>
