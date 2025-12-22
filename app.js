@@ -1,10 +1,9 @@
 /* ============================================================
-   APP.JS — ÁREAS CLIMATIZADAS CBA
+   APP.JS — DEFINICIONES GENERALES
 =========================================================== */
 
 let respuestas = {};
 let datosGenerales = { medico: null };
-let imagenesCargadas = [];
 
 /* ============================================================
    DEFINICIÓN DE BLOQUES Y PREGUNTAS
@@ -14,66 +13,178 @@ const bloques = {
 
   /* BLOQUE 2 – CONFORT TÉRMICO */
   form2: [
-    { t: "¿El recinto cuenta con temperatura estable?", d: "Temperatura agradable y homogénea.", g: "grave" },
-    { t: "¿Hay circulación de aire natural (ventilación cruzada)?", d: "Ventanas o flujo cruzado.", g: "leve" },
-    { t: "¿El espacio posee aire acondicionado en funcionamiento?", d: "AA operativo.", g: "medio" },
-    { t: "¿Posee ventiladores funcionando?", d: "Ventiladores operativos.", g: "leve" }
+    {
+      t: "¿El recinto cuenta con temperatura estable?",
+      d: "Considerar que mantiene una temperatura agradable y homogénea.",
+      g: "muygrave"
+    },
+    {
+      t: "¿Hay circulación de aire natural (ventilación cruzada)?",
+      d: "Presencia de ventanas, aberturas o flujo cruzado.",
+      g: "leve"
+    },
+    {
+      t: "¿El espacio posee aire acondicionado en funcionamiento?",
+      d: "Aire acondicionado operativo y accesible.",
+      g: "medio"
+    },
+    {
+      t: "¿Posee ventiladores funcionando?",
+      d: "Ventiladores operativos y distribuidos adecuadamente.",
+      g: "leve"
+    }
   ],
 
   /* BLOQUE 3 – DISPOSICIONES EDILICIAS */
   form3: [
-    { t: "¿La fachada principal está orientada al norte?", d: "Radiación controlable.", g: "medio" },
-    { t: "¿La menor cantidad de aberturas se orientan al oeste?", d: "Menor carga térmica.", g: "medio" },
-    { t: "¿El área permite acceso seguro PMR?", d: "Rampas, accesos, nivelación.", g: "grave" }
+    {
+      t: "¿La fachada principal está orientada al norte?",
+      d: "La orientación norte recibe radiación homogénea y controlable.",
+      g: "medio"
+    },
+    {
+      t: "¿La menor cantidad de aberturas se orientan al oeste?",
+      d: "La orientación oeste recibe mayor carga térmica.",
+      g: "medio"
+    },
+    {
+      t: "¿El área permite el acceso seguro de personas con movilidad reducida?",
+      d: "Considerar rampas, nivelación, ausencia de obstáculos, accesos amplios.",
+      g: "grave"
+    }
   ],
 
-  /* BLOQUE 4 – ENVOLVENTE */
+  /* BLOQUE 4 – ENVOLVENTE TÉRMICA */
   form4: [
-    { t: "¿El techo evita transferencia de calor?", d: "Aislación térmica.", g: "grave" },
-    { t: "¿Posee planta superior?", d: "Reduce carga térmica.", g: "medio" }
+    {
+      t: "¿El material del techo evita la transferencia de calor al recinto?",
+      d: "Ejemplo: losa, cielorraso aislante, techo de chapa con aislación térmica.",
+      g: "grave"
+    },
+    {
+      t: "¿El recinto posee planta superior?",
+      d: "La planta superior reduce la transferencia térmica directa.",
+      g: "medio"
+    }
   ],
 
-  /* BLOQUE 5 – PROTECCIONES */
+  /* BLOQUE 5 – PROTECCIONES PASIVAS */
   form5: [
-    { t: "¿Posee elementos de sombra?", d: "Toldos, cortinas.", g: "leve" },
-    { t: "¿Sombreado al norte?", d: "Vegetación / edificios.", g: "medio" },
-    { t: "¿Sombreado al oeste?", d: "Vegetación / edificios.", g: "medio" }
+    {
+      t: "¿Posee toldos, cortinas o elementos de sombra?",
+      d: "Elementos que mitiguen la radiación solar directa.",
+      g: "leve"
+    },
+    {
+      t: "¿Posee vegetación / edificios / medianeras al norte?",
+      d: "Elementos que generan sombreado.",
+      g: "medio"
+    },
+    {
+      t: "¿Posee vegetación / edificios / medianeras al oeste?",
+      d: "Elementos que generan sombreado.",
+      g: "medio"
+    }
   ],
 
   /* BLOQUE 6 – DISEÑO */
   form6: [
-    { t: "¿Aberturas altas para salida de aire caliente?", d: "Ventilación superior.", g: "leve" },
-    { t: "¿Posee tela mosquitera?", d: "Condiciones sanitarias.", g: "leve" }
+    {
+      t: "¿Cuenta con aberturas altas para permitir la salida del aire caliente?",
+      d: "Aberturas a más de 2 m favorecen la ventilación.",
+      g: "leve"
+    },
+    {
+      t: "¿Posee tela mosquitera?",
+      d: "Evita ingreso de insectos.",
+      g: "leve"
+    }
   ],
 
   /* BLOQUE 7 – SERVICIOS */
   form7: [
     {
-      t: "¿El área cuenta con agua fría disponible para el público?",
-      d: "Heladera, dispenser o botellón.",
+      t: "¿El punto cuenta con disponibilidad de agua fría para el público?",
+      d: "Heladera, dispenser o botellón refrigerado.",
       g: "muygrave"
     },
-    { t: "¿Área de reposo o espera?", d: "Sillas o bancos.", g: "medio" },
-    { t: "¿Preparada para energía solar futura?", d: "Espacio y estructura.", g: "medio" }
+    {
+      t: "¿Se dispone de un área de reposo o espera?",
+      d: "Sillas, bancos o sectores confortables.",
+      g: "medio"
+    },
+    {
+      t: "¿El espacio está preparado para futura instalación de energía solar?",
+      d: "Espacio físico, estructura y capacidad eléctrica.",
+      g: "medio"
+    }
   ]
 };
 
 /* ============================================================
-   FORMULARIOS
+   MEJORAS (MS / MR)
+=========================================================== */
+
+const mejoras = {
+  "form2_1": { tipo: "MS", texto: [
+    "Instalar extractores de aire.",
+    "Agregar aberturas para ventilación cruzada, preferentemente altas."
+  ]},
+  "form2_2": { tipo: "MR", texto: [
+    "Instalación o reparación del aire acondicionado."
+  ]},
+  "form2_3": { tipo: "MR", texto: [
+    "Instalación o reparación de ventiladores."
+  ]},
+  "form3_2": { tipo: "MR", texto: [
+    "Adaptación del ingreso para personas con movilidad reducida."
+  ]},
+  "form4_0": { tipo: "MS", texto: [
+    "Instalar cielorraso.",
+    "Pintar techos de color claro.",
+    "Agregar aislación térmica."
+  ]},
+  "form5_0": { tipo: "MR", texto: [
+    "Agregar cortinas, toldos o elementos de sombra."
+  ]},
+  "form5_1": { tipo: "MS", texto: [
+    "Agregar vegetación o parasoles al norte."
+  ]},
+  "form5_2": { tipo: "MS", texto: [
+    "Agregar vegetación o parasoles al oeste."
+  ]},
+  "form6_1": { tipo: "MS", texto: [
+    "Instalación de tela mosquitera."
+  ]},
+  "form7_0": { tipo: "MR", texto: [
+    "Colocar dispenser de agua fría."
+  ]},
+  "form7_1": { tipo: "MR", texto: [
+    "Incorporar sillas o bancos."
+  ]},
+  "form7_2": { tipo: "MS", texto: [
+    "Realizar estudios para posible instalación solar."
+  ]}
+};
+
+/* ============================================================
+   GENERACIÓN DE FORMULARIOS
 =========================================================== */
 
 function generarFormularios() {
-  Object.keys(bloques).forEach(b => {
-    const cont = document.getElementById(b);
-    bloques[b].forEach((p, i) => {
+  Object.keys(bloques).forEach(idBloque => {
+    const cont = document.getElementById(idBloque);
+    if (!cont) return;
+
+    bloques[idBloque].forEach((preg, index) => {
       const div = document.createElement("div");
       div.className = "pregunta";
       div.innerHTML = `
-        <strong>${p.t}</strong>
-        <p class="explica">${p.d}</p>
+        <strong>${preg.t}</strong>
+        <p class="explica">${preg.d}</p>
         <div class="opciones">
-          <button class="btn-resp btn-si" onclick="seleccionarRespuesta('${b}',${i},'si',this)">Sí</button>
-          <button class="btn-resp btn-no-${p.g}" onclick="seleccionarRespuesta('${b}',${i},'no',this)">No</button>
+          <button onclick="seleccionarRespuesta('${idBloque}',${index},'si',this)">Sí</button>
+          <button onclick="seleccionarRespuesta('${idBloque}',${index},'no',this)">No</button>
         </div>`;
       cont.appendChild(div);
     });
@@ -82,24 +193,28 @@ function generarFormularios() {
 generarFormularios();
 
 /* ============================================================
-   RESPUESTAS Y NAVEGACIÓN
+   RESPUESTAS
 =========================================================== */
 
-function seleccionarRespuesta(b,i,v,btn){
-  respuestas[`${b}_${i}`]=v;
-  btn.parentElement.querySelectorAll(".btn-resp").forEach(x=>x.classList.remove("seleccionado"));
+function seleccionarRespuesta(bloque,index,valor,btn){
+  respuestas[`${bloque}_${index}`]=valor;
+  btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("seleccionado"));
   btn.classList.add("seleccionado");
 }
 
-function setDatoGeneral(c,v,btn){
-  datosGenerales[c]=v;
-  btn.parentNode.querySelectorAll("button").forEach(x=>x.classList.remove("seleccionado"));
+function setDatoGeneral(campo,valor,btn){
+  datosGenerales[campo]=valor;
+  btn.parentNode.querySelectorAll("button").forEach(b=>b.classList.remove("seleccionado"));
   btn.classList.add("seleccionado");
 }
+
+/* ============================================================
+   NAVEGACIÓN
+=========================================================== */
 
 let pasoActual=1;
 function mostrarPaso(n){
-  document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".step").forEach(d=>d.classList.remove("active"));
   document.getElementById("step"+n).classList.add("active");
 }
 function nextStep(){pasoActual++;mostrarPaso(pasoActual);}
@@ -110,121 +225,355 @@ function prevStep(){pasoActual--;mostrarPaso(pasoActual);}
 =========================================================== */
 
 document.getElementById("m2").addEventListener("input",()=>{
-  const m2=parseFloat(m2.value)||0;
-  capacidadTexto.innerHTML=`<strong>Personas permitidas:</strong> ${Math.floor(m2/3.5)}`;
+  let m2=parseFloat(document.getElementById("m2").value)||0;
+  document.getElementById("capacidadTexto").innerHTML =
+    `<strong>Personas permitidas:</strong> ${Math.floor(m2/3.5)}`;
 });
 
 /* ============================================================
-   GRAVEDADES Y CLASIFICACIÓN
+   CLASIFICACIÓN
 =========================================================== */
 
-function obtenerGravedadFinal(b,i,v){
-  if(b==="form7"&&i===0) return v==="si"?"bueno":"muygrave";
-  if(b==="form5") return v==="si"?"bueno":"leve";
-  return v==="si"?"bueno":bloques[b][i].g;
+function obtenerMejoras(){
+  let sugeridas=[], requeridas=[];
+  Object.keys(mejoras).forEach(k=>{
+    if(respuestas[k]==="no"){
+      if(mejoras[k].tipo==="MS") sugeridas.push(...mejoras[k].texto);
+      if(mejoras[k].tipo==="MR") requeridas.push(...mejoras[k].texto);
+    }
+  });
+  return {sugeridas,requeridas};
 }
 
 function clasificarPunto(){
   let muy=0,gra=0,med=0,lev=0,buenas=0;
   Object.keys(respuestas).forEach(k=>{
-    const[b,i]=k.split("_");
-    const g=obtenerGravedadFinal(b,+i,respuestas[k]);
-    if(g==="bueno")buenas++;
-    if(g==="muygrave")muy++;
-    if(g==="grave")gra++;
-    if(g==="medio")med++;
-    if(g==="leve")lev++;
+    let g=bloques[k.split("_")[0]][k.split("_")[1]].g;
+    if(respuestas[k]==="si") buenas++;
+    if(g==="muygrave"&&respuestas[k]==="no") muy++;
+    if(g==="grave"&&respuestas[k]==="no") gra++;
+    if(g==="medio"&&respuestas[k]==="no") med++;
+    if(g==="leve"&&respuestas[k]==="no") lev++;
   });
 
-  if(respuestas["form7_0"]==="no"||buenas<4||muy>=1||gra>=4||med>=6||lev>=7)
-    return{estado:"rojo",muy,gra,med,lev,buenas};
-
-  if(gra>=2||med>=3||lev>=4)
-    return{estado:"amarillo",muy,gra,med,lev,buenas};
-
-  return{estado:"verde",muy,gra,med,lev,buenas};
+  if(respuestas["form7_0"]==="no"||muy>=1||gra>=4||med>=6) return "rojo";
+  if(gra>=2||med>=3||lev>=4) return "amarillo";
+  return "verde";
 }
 
 /* ============================================================
-   IMÁGENES
+   RESULTADO FINAL
 =========================================================== */
-
-function manejarImagen(input){
-  const file=input.files[0];
-  if(!file)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    imagenesCargadas.push(e.target.result);
-    mostrarImagenes();
-  };
-  r.readAsDataURL(file);
-}
-
-function mostrarImagenes(){
-  const cont=document.getElementById("imagenesPreview");
-  if(!cont)return;
-  cont.innerHTML="";
-  imagenesCargadas.forEach(src=>{
-    const img=document.createElement("img");
-    img.src=src;
-    img.style.maxWidth="150px";
-    img.style.margin="5px";
-    cont.appendChild(img);
-  });
-}
-
-/* ============================================================
-   RESULTADOS
-=========================================================== */
-
-function cargarResultados(){
-  calcular();
-  mostrarPaso(8);
-}
 
 function calcular(){
+  const estado=clasificarPunto();
+  const {sugeridas,requeridas}=obtenerMejoras();
+  let m2=parseFloat(document.getElementById("m2").value)||0;
 
-  const {estado,muy,gra,med,lev,buenas}=clasificarPunto();
-  const m2=parseFloat(m2.value)||0;
-  const capacidad=Math.floor(m2/3.5);
-
-  let html=`
-  <h2>${estado==="rojo"?"🟥 Área NO apta":estado==="amarillo"?"🟡 Área con mejoras":"🟢 Área apta"}</h2>
+  let html=`<h2>${estado==="rojo"?"🟥 NO apta":estado==="amarillo"?"🟡 Apta con mejoras":"🟢 Apta"}</h2>
   <p><strong>Área:</strong> ${m2} m²</p>
-  <p><strong>Capacidad:</strong> ${capacidad} personas</p><hr>
+  <p><strong>Capacidad:</strong> ${Math.floor(m2/3.5)} personas</p>`;
 
-  <h3>Resumen</h3>
-  <ul>
-    <li>Buenas: ${buenas}</li>
-    <li>Leves: ${lev}</li>
-    <li>Medias: ${med}</li>
-    <li>Graves: ${gra}</li>
-    <li>Muy graves: ${muy}</li>
-  </ul><hr>
+  if(requeridas.length||sugeridas.length){
+    html+=`<h3>Medidas de mejora</h3>`;
+    if(requeridas.length) html+=`<h4>🔴 Requeridas</h4><ul>${requeridas.map(m=>`<li>${m}</li>`).join("")}</ul>`;
+    if(sugeridas.length) html+=`<h4>🟡 Sugeridas</h4><ul>${sugeridas.map(m=>`<li>${m}</li>`).join("")}</ul>`;
+  }
 
-  <h3>Detalle por bloque</h3>
-  `;
+  html+=`<h3>Observaciones</h3><textarea id="comentarios"></textarea>`;
+  document.getElementById("resultado").innerHTML=html;
+  nextStep();
+}
 
-  Object.keys(bloques).forEach(b=>{
-    html+=`<h4>${b}</h4>`;
-    bloques[b].forEach((p,i)=>{
-      const v=respuestas[`${b}_${i}`];
-      const g=v?obtenerGravedadFinal(b,i,v):"—";
-      html+=`<p><strong>${p.t}</strong><br>${v?`${v.toUpperCase()} — ${g.toUpperCase()}`:"Sin respuesta"}</p>`;
+/* ============================================================
+   PDF
+=========================================================== */
+
+f/* ============================================================
+   APP.JS — DEFINICIONES GENERALES
+=========================================================== */
+
+let respuestas = {};
+let datosGenerales = { medico: null };
+
+/* ============================================================
+   DEFINICIÓN DE BLOQUES Y PREGUNTAS
+=========================================================== */
+
+const bloques = {
+
+  /* BLOQUE 2 – CONFORT TÉRMICO */
+  form2: [
+    {
+      t: "¿El recinto cuenta con temperatura estable?",
+      d: "Considerar que mantiene una temperatura agradable y homogénea.",
+      g: "muygrave"
+    },
+    {
+      t: "¿Hay circulación de aire natural (ventilación cruzada)?",
+      d: "Presencia de ventanas, aberturas o flujo cruzado.",
+      g: "leve"
+    },
+    {
+      t: "¿El espacio posee aire acondicionado en funcionamiento?",
+      d: "Aire acondicionado operativo y accesible.",
+      g: "medio"
+    },
+    {
+      t: "¿Posee ventiladores funcionando?",
+      d: "Ventiladores operativos y distribuidos adecuadamente.",
+      g: "leve"
+    }
+  ],
+
+  /* BLOQUE 3 – DISPOSICIONES EDILICIAS */
+  form3: [
+    {
+      t: "¿La fachada principal está orientada al norte?",
+      d: "La orientación norte recibe radiación homogénea y controlable.",
+      g: "medio"
+    },
+    {
+      t: "¿La menor cantidad de aberturas se orientan al oeste?",
+      d: "La orientación oeste recibe mayor carga térmica.",
+      g: "medio"
+    },
+    {
+      t: "¿El área permite el acceso seguro de personas con movilidad reducida?",
+      d: "Considerar rampas, nivelación, ausencia de obstáculos, accesos amplios.",
+      g: "grave"
+    }
+  ],
+
+  /* BLOQUE 4 – ENVOLVENTE TÉRMICA */
+  form4: [
+    {
+      t: "¿El material del techo evita la transferencia de calor al recinto?",
+      d: "Ejemplo: losa, cielorraso aislante, techo de chapa con aislación térmica.",
+      g: "grave"
+    },
+    {
+      t: "¿El recinto posee planta superior?",
+      d: "La planta superior reduce la transferencia térmica directa.",
+      g: "medio"
+    }
+  ],
+
+  /* BLOQUE 5 – PROTECCIONES PASIVAS */
+  form5: [
+    {
+      t: "¿Posee toldos, cortinas o elementos de sombra?",
+      d: "Elementos que mitiguen la radiación solar directa.",
+      g: "leve"
+    },
+    {
+      t: "¿Posee vegetación / edificios / medianeras al norte?",
+      d: "Elementos que generan sombreado.",
+      g: "medio"
+    },
+    {
+      t: "¿Posee vegetación / edificios / medianeras al oeste?",
+      d: "Elementos que generan sombreado.",
+      g: "medio"
+    }
+  ],
+
+  /* BLOQUE 6 – DISEÑO */
+  form6: [
+    {
+      t: "¿Cuenta con aberturas altas para permitir la salida del aire caliente?",
+      d: "Aberturas a más de 2 m favorecen la ventilación.",
+      g: "leve"
+    },
+    {
+      t: "¿Posee tela mosquitera?",
+      d: "Evita ingreso de insectos.",
+      g: "leve"
+    }
+  ],
+
+  /* BLOQUE 7 – SERVICIOS */
+  form7: [
+    {
+      t: "¿El punto cuenta con disponibilidad de agua fría para el público?",
+      d: "Heladera, dispenser o botellón refrigerado.",
+      g: "muygrave"
+    },
+    {
+      t: "¿Se dispone de un área de reposo o espera?",
+      d: "Sillas, bancos o sectores confortables.",
+      g: "medio"
+    },
+    {
+      t: "¿El espacio está preparado para futura instalación de energía solar?",
+      d: "Espacio físico, estructura y capacidad eléctrica.",
+      g: "medio"
+    }
+  ]
+};
+
+/* ============================================================
+   MEJORAS (MS / MR)
+=========================================================== */
+
+const mejoras = {
+  "form2_1": { tipo: "MS", texto: [
+    "Instalar extractores de aire.",
+    "Agregar aberturas para ventilación cruzada, preferentemente altas."
+  ]},
+  "form2_2": { tipo: "MR", texto: [
+    "Instalación o reparación del aire acondicionado."
+  ]},
+  "form2_3": { tipo: "MR", texto: [
+    "Instalación o reparación de ventiladores."
+  ]},
+  "form3_2": { tipo: "MR", texto: [
+    "Adaptación del ingreso para personas con movilidad reducida."
+  ]},
+  "form4_0": { tipo: "MS", texto: [
+    "Instalar cielorraso.",
+    "Pintar techos de color claro.",
+    "Agregar aislación térmica."
+  ]},
+  "form5_0": { tipo: "MR", texto: [
+    "Agregar cortinas, toldos o elementos de sombra."
+  ]},
+  "form5_1": { tipo: "MS", texto: [
+    "Agregar vegetación o parasoles al norte."
+  ]},
+  "form5_2": { tipo: "MS", texto: [
+    "Agregar vegetación o parasoles al oeste."
+  ]},
+  "form6_1": { tipo: "MS", texto: [
+    "Instalación de tela mosquitera."
+  ]},
+  "form7_0": { tipo: "MR", texto: [
+    "Colocar dispenser de agua fría."
+  ]},
+  "form7_1": { tipo: "MR", texto: [
+    "Incorporar sillas o bancos."
+  ]},
+  "form7_2": { tipo: "MS", texto: [
+    "Realizar estudios para posible instalación solar."
+  ]}
+};
+
+/* ============================================================
+   GENERACIÓN DE FORMULARIOS
+=========================================================== */
+
+function generarFormularios() {
+  Object.keys(bloques).forEach(idBloque => {
+    const cont = document.getElementById(idBloque);
+    if (!cont) return;
+
+    bloques[idBloque].forEach((preg, index) => {
+      const div = document.createElement("div");
+      div.className = "pregunta";
+      div.innerHTML = `
+        <strong>${preg.t}</strong>
+        <p class="explica">${preg.d}</p>
+        <div class="opciones">
+          <button onclick="seleccionarRespuesta('${idBloque}',${index},'si',this)">Sí</button>
+          <button onclick="seleccionarRespuesta('${idBloque}',${index},'no',this)">No</button>
+        </div>`;
+      cont.appendChild(div);
     });
-    html+="<hr>";
+  });
+}
+generarFormularios();
+
+/* ============================================================
+   RESPUESTAS
+=========================================================== */
+
+function seleccionarRespuesta(bloque,index,valor,btn){
+  respuestas[`${bloque}_${index}`]=valor;
+  btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("seleccionado"));
+  btn.classList.add("seleccionado");
+}
+
+function setDatoGeneral(campo,valor,btn){
+  datosGenerales[campo]=valor;
+  btn.parentNode.querySelectorAll("button").forEach(b=>b.classList.remove("seleccionado"));
+  btn.classList.add("seleccionado");
+}
+
+/* ============================================================
+   NAVEGACIÓN
+=========================================================== */
+
+let pasoActual=1;
+function mostrarPaso(n){
+  document.querySelectorAll(".step").forEach(d=>d.classList.remove("active"));
+  document.getElementById("step"+n).classList.add("active");
+}
+function nextStep(){pasoActual++;mostrarPaso(pasoActual);}
+function prevStep(){pasoActual--;mostrarPaso(pasoActual);}
+
+/* ============================================================
+   CAPACIDAD
+=========================================================== */
+
+document.getElementById("m2").addEventListener("input",()=>{
+  let m2=parseFloat(document.getElementById("m2").value)||0;
+  document.getElementById("capacidadTexto").innerHTML =
+    `<strong>Personas permitidas:</strong> ${Math.floor(m2/3.5)}`;
+});
+
+/* ============================================================
+   CLASIFICACIÓN
+=========================================================== */
+
+function obtenerMejoras(){
+  let sugeridas=[], requeridas=[];
+  Object.keys(mejoras).forEach(k=>{
+    if(respuestas[k]==="no"){
+      if(mejoras[k].tipo==="MS") sugeridas.push(...mejoras[k].texto);
+      if(mejoras[k].tipo==="MR") requeridas.push(...mejoras[k].texto);
+    }
+  });
+  return {sugeridas,requeridas};
+}
+
+function clasificarPunto(){
+  let muy=0,gra=0,med=0,lev=0,buenas=0;
+  Object.keys(respuestas).forEach(k=>{
+    let g=bloques[k.split("_")[0]][k.split("_")[1]].g;
+    if(respuestas[k]==="si") buenas++;
+    if(g==="muygrave"&&respuestas[k]==="no") muy++;
+    if(g==="grave"&&respuestas[k]==="no") gra++;
+    if(g==="medio"&&respuestas[k]==="no") med++;
+    if(g==="leve"&&respuestas[k]==="no") lev++;
   });
 
-  html+=`
-  <h3>Comentarios adicionales</h3>
-  <textarea id="comentariosFinal" style="width:100%;height:120px;"></textarea>
+  if(respuestas["form7_0"]==="no"||muy>=1||gra>=4||med>=6) return "rojo";
+  if(gra>=2||med>=3||lev>=4) return "amarillo";
+  return "verde";
+}
 
-  <h3>Registro fotográfico</h3>
-  <div id="imagenesPreview"></div>
-  `;
+/* ============================================================
+   RESULTADO FINAL
+=========================================================== */
 
-  resultado.innerHTML=html;
-  mostrarImagenes();
+function calcular(){
+  const estado=clasificarPunto();
+  const {sugeridas,requeridas}=obtenerMejoras();
+  let m2=parseFloat(document.getElementById("m2").value)||0;
+
+  let html=`<h2>${estado==="rojo"?"🟥 NO apta":estado==="amarillo"?"🟡 Apta con mejoras":"🟢 Apta"}</h2>
+  <p><strong>Área:</strong> ${m2} m²</p>
+  <p><strong>Capacidad:</strong> ${Math.floor(m2/3.5)} personas</p>`;
+
+  if(requeridas.length||sugeridas.length){
+    html+=`<h3>Medidas de mejora</h3>`;
+    if(requeridas.length) html+=`<h4>🔴 Requeridas</h4><ul>${requeridas.map(m=>`<li>${m}</li>`).join("")}</ul>`;
+    if(sugeridas.length) html+=`<h4>🟡 Sugeridas</h4><ul>${sugeridas.map(m=>`<li>${m}</li>`).join("")}</ul>`;
+  }
+
+  html+=`<h3>Observaciones</h3><textarea id="comentarios"></textarea>`;
+  document.getElementById("resultado").innerHTML=html;
+  nextStep();
 }
 
 /* ============================================================
@@ -232,13 +581,17 @@ function calcular(){
 =========================================================== */
 
 function descargarPDF(){
-  const w=window.open("","_blank");
-  w.document.write(`
-  <html><head>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>body{font-family:'Public Sans',sans-serif;padding:20px}</style>
-  </head><body>${resultado.innerHTML}</body></html>`);
+  const res=document.getElementById("resultado").cloneNode(true);
+  const ta=res.querySelector("#comentarios");
+  if(ta){
+    const p=document.createElement("p");
+    p.innerHTML=ta.value?ta.value.replace(/\n/g,"<br>"):"<em>Sin observaciones.</em>";
+    ta.replaceWith(p);
+  }
+  const w=window.open("");
+  w.document.write(`<html><body>${res.innerHTML}</body></html>`);
   w.document.close();
   w.print();
 }
+
 
