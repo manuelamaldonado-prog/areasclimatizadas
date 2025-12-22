@@ -35,6 +35,7 @@
   <label>Metros cuadrados disponibles</label>
   <input id="m2" class="input" type="number">
 
+  <!-- AQUÍ SE MUESTRA PERSONAS / m2 -->
   <p id="capacidadTexto" class="capacidad"></p>
 
   <label>Disponibilidad de servicio médico (107)</label>
@@ -92,20 +93,14 @@
 </div>
 
 <!-- ============================================================
-     RESULTADO FINAL + FOTOS + OBSERVACIONES
+     RESULTADO FINAL (ÚNICO BLOQUE FINAL)
 ============================================================== -->
 <div id="step8" class="step">
   <h1>Resultado</h1>
 
   <div id="resultado"></div>
 
-  <h3>Observaciones del relevador</h3>
-  <textarea id="comentariosGlobales" class="input" style="min-height:120px;"></textarea>
-
-  <h3>Registro fotográfico</h3>
-  <input type="file" id="fotos" accept="image/*" multiple class="input">
-
-  <div id="previewFotos"></div>
+  <!-- NO HAY OTRO CUADRO DE OBSERVACIONES FUERA DEL RESULTADO -->
 
   <button class="next-btn" onclick="descargarPDF()">Descargar PDF</button>
   <button class="next-btn" onclick="location.reload()">Nueva evaluación</button>
@@ -116,27 +111,6 @@
 ============================================================== -->
 <script src="app.js"></script>
 
-<script>
-/* ============================================================
-   PREVISUALIZACIÓN DE FOTOS
-=========================================================== */
-document.getElementById("fotos").addEventListener("change", function () {
-  const preview = document.getElementById("previewFotos");
-  preview.innerHTML = "";
-
-  Array.from(this.files).forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = document.createElement("img");
-      img.src = e.target.result;
-      img.style.maxWidth = "100%";
-      img.style.marginBottom = "10px";
-      preview.appendChild(img);
-    };
-    reader.readAsDataURL(file);
-  });
-});
-</script>
-
 </body>
 </html>
+
