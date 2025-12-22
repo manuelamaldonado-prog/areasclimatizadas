@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Punto de Hidratación CBA</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -12,32 +13,80 @@
 
 <div id="step1" class="step active">
   <h1>Bloque 1 – Información general</h1>
-  <input id="nombre" placeholder="Nombre del punto">
-  <input id="persona" placeholder="Responsable">
-  <input id="dias" placeholder="Días">
-  <input id="horarios" placeholder="Horarios">
-  <input id="m2" type="number" placeholder="m² disponibles">
-  <p id="capacidadTexto"></p>
 
-  <p>Servicio médico (107)</p>
-  <button onclick="setDatoGeneral('medico','si',this)">Sí</button>
-  <button onclick="setDatoGeneral('medico','no',this)">No</button>
+  <label>Nombre / Número del punto</label>
+  <input id="nombre" class="input" />
 
-  <button onclick="nextStep()">Siguiente</button>
+  <label>Persona a cargo del relevamiento</label>
+  <input id="persona" class="input" />
+
+  <label>Días</label>
+  <input id="dias" class="input" />
+
+  <label>Horarios</label>
+  <input id="horarios" class="input" />
+
+  <label>Metros cuadrados disponibles</label>
+  <input id="m2" type="number" class="input" />
+
+  <p id="capacidadTexto" class="capacidad"></p>
+
+  <label>Disponibilidad de servicio médico (107)</label>
+  <div class="yesno-container">
+    <button onclick="setDatoGeneral('medico','si',this)" class="yesno">Sí</button>
+    <button onclick="setDatoGeneral('medico','no',this)" class="yesno">No</button>
+  </div>
+
+  <button onclick="nextStep()" class="next-btn">Siguiente ➜</button>
 </div>
 
-<div id="step2" class="step"><h1>Confort térmico</h1><div id="form2"></div><button onclick="prevStep()">Volver</button><button onclick="nextStep()">Siguiente</button></div>
-<div id="step3" class="step"><h1>Disposiciones edilicias</h1><div id="form3"></div><button onclick="prevStep()">Volver</button><button onclick="nextStep()">Siguiente</button></div>
-<div id="step4" class="step"><h1>Envolvente térmica</h1><div id="form4"></div><button onclick="prevStep()">Volver</button><button onclick="nextStep()">Siguiente</button></div>
-<div id="step5" class="step"><h1>Protecciones pasivas</h1><div id="form5"></div><button onclick="prevStep()">Volver</button><button onclick="nextStep()">Siguiente</button></div>
-<div id="step6" class="step"><h1>Diseño</h1><div id="form6"></div><button onclick="prevStep()">Volver</button><button onclick="nextStep()">Siguiente</button></div>
-<div id="step7" class="step"><h1>Servicios</h1><div id="form7"></div><button onclick="prevStep()">Volver</button><button onclick="calcular()">Calcular</button></div>
+<div id="step2" class="step">
+  <h1>Bloque 2 – Confort térmico</h1>
+  <div id="form2"></div>
+  <button onclick="prevStep()" class="back-btn">← Volver</button>
+  <button onclick="nextStep()" class="next-btn">Siguiente ➜</button>
+</div>
+
+<div id="step3" class="step">
+  <h1>Bloque 3 – Disposiciones edilicias</h1>
+  <div id="form3"></div>
+  <button onclick="prevStep()" class="back-btn">← Volver</button>
+  <button onclick="nextStep()" class="next-btn">Siguiente ➜</button>
+</div>
+
+<div id="step4" class="step">
+  <h1>Bloque 4 – Envolvente térmica</h1>
+  <div id="form4"></div>
+  <button onclick="prevStep()" class="back-btn">← Volver</button>
+  <button onclick="nextStep()" class="next-btn">Siguiente ➜</button>
+</div>
+
+<div id="step5" class="step">
+  <h1>Bloque 5 – Protecciones pasivas</h1>
+  <div id="form5"></div>
+  <button onclick="prevStep()" class="back-btn">← Volver</button>
+  <button onclick="nextStep()" class="next-btn">Siguiente ➜</button>
+</div>
+
+<div id="step6" class="step">
+  <h1>Bloque 6 – Diseño</h1>
+  <div id="form6"></div>
+  <button onclick="prevStep()" class="back-btn">← Volver</button>
+  <button onclick="nextStep()" class="next-btn">Siguiente ➜</button>
+</div>
+
+<div id="step7" class="step">
+  <h1>Bloque 7 – Servicios</h1>
+  <div id="form7"></div>
+  <button onclick="prevStep()" class="back-btn">← Volver</button>
+  <button onclick="calcular()" class="next-btn">Calcular resultado</button>
+</div>
 
 <div id="step8" class="step">
   <h1>Resultado</h1>
   <div id="resultado"></div>
-  <button onclick="descargarPDF()">Descargar PDF</button>
-  <button onclick="location.reload()">Nueva evaluación</button>
+  <button onclick="descargarPDF()" class="next-btn">Descargar PDF</button>
+  <button onclick="location.reload()" class="next-btn">Nueva evaluación</button>
 </div>
 
 <script src="app.js"></script>
