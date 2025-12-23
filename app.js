@@ -180,18 +180,41 @@ function calcular() {
 =========================================================== */
 
 function descargarPDF() {
-  const res = document.getElementById("resultado").cloneNode(true);
-  const t = res.querySelector("#comentarios");
-  if (t) {
+  const resultado = document.getElementById("resultado").cloneNode(true);
+
+  // Observaciones
+  const textarea = resultado.querySelector("#comentarios");
+  if (textarea) {
     const p = document.createElement("p");
-    p.innerHTML = t.value || "Sin observaciones.";
-    t.replaceWith(p);
+    p.innerHTML = textarea.value
+      ? textarea.value.replace(/\n/g, "<br>")
+      : "<em>Sin observaciones.</em>";
+    textarea.replaceWith(p);
   }
+
+  // Fotos
+  const preview = document.getElementById("previewFotos");
+  if (preview) {
+    const fotosClon = preview.cloneNode(true);
+    resultado.appendChild(document.createElement("hr"));
+    resultado.appendChild(fotosClon);
+  }
+
   const w = window.open("");
-  w.document.write(`<html><body>${res.innerHTML}</body></html>`);
+  w.document.write(`
+    <html>
+      <head>
+        <title>Resultado – Punto de Hidratación</title>
+      </head>
+      <body>
+        ${resultado.innerHTML}
+      </body>
+    </html>
+  `);
   w.document.close();
   w.print();
 }
+
 
 /* ============================================================
    INIT
